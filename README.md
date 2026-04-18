@@ -102,6 +102,10 @@ media-lab/
 ├─ package.json
 ├─ tsconfig.json
 ├─ README.md
+├─ test-assets/
+│  ├─ README.md
+│  └─ originals/
+│     └─ .gitkeep
 └─ src/
    ├─ server.ts
    ├─ types.ts
@@ -246,6 +250,26 @@ This avoids the common mistake where a container tries to reach Azurite on its o
 Recent Azure SDK releases can send a storage API version newer than the Azurite image bundled in local development.
 
 The Compose setup runs Azurite with `--skipApiVersionCheck` so local containers can still talk to the emulator without pinning older SDK packages.
+
+## Manual Test Assets
+
+Put original test images in `test-assets/originals/`.
+
+Examples:
+
+- `test-assets/originals/sample.jpg`
+- `test-assets/originals/sample.png`
+- `test-assets/originals/sample.heic`
+
+The checked-in [requests.http](/Users/knawattranakul/Projects/media-lab/requests.http) file points its upload example directly at `./test-assets/originals/sample.jpg`, so you can drop in a file there and test the full user journey without editing paths outside the repo.
+
+Best practice for this repo:
+
+- keep original sample inputs in `test-assets/originals/`
+- do not write derived outputs back into the repo
+- inspect generated files in Azurite Blob Storage under `derived/{jobId}/...`
+
+That keeps the repository focused on source inputs, while the processed outputs stay in the same storage system the application actually uses.
 
 ## Code Quality Tooling
 
