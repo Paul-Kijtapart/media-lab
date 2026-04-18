@@ -1,0 +1,32 @@
+@host = http://localhost:3000
+
+# Replace this after you create a job from the upload request below.
+@jobId = replace-me
+
+# Update this to an absolute path on your machine before running the upload.
+# Start with a JPEG or PNG for the first test. Try HEIC after the basic flow works.
+@imagePath = /absolute/path/to/sample.jpg
+
+### Health check
+# Confirms the API is running and can reach the local storage resources.
+GET {{host}}/health
+
+###
+
+### Upload image
+# Sends a multipart/form-data upload with one file field named "image".
+POST {{host}}/jobs
+Content-Type: multipart/form-data; boundary=MediaLabBoundary
+
+--MediaLabBoundary
+Content-Disposition: form-data; name="image"; filename="sample.jpg"
+Content-Type: image/jpeg
+
+< {{imagePath}}
+--MediaLabBoundary--
+
+###
+
+### Get job status
+# After upload, copy the returned jobId into the variable at the top of this file.
+GET {{host}}/jobs/{{jobId}}
